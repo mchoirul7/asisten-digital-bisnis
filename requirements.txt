@@ -11,4 +11,6 @@ nltk
 sentence-transformers
 python-telegram-bot
 google-generativeai
+matplotlib
+plotly
 

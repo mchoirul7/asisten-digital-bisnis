@@ -39,3 +39,11 @@ def is_duplicate_row(data_hash):
     result = cursor.fetchone()
     conn.close()
     return result is not None
+
+
+def delete_data_by_period(period):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM inventory WHERE data_period = ?", (period,))
+    conn.commit()
+    conn.close()
