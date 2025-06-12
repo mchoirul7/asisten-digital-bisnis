@@ -47,3 +47,10 @@ def delete_data_by_period(period):
     cursor.execute("DELETE FROM inventory WHERE data_period = ?", (period,))
     conn.commit()
     conn.close()
+
+def reset_inventory():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM inventory")
+    conn.commit()
+    conn.close()

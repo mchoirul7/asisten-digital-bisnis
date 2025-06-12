@@ -69,3 +69,16 @@ elif menu.startswith("📊"):
     show_dashboard()
 elif menu.startswith("🕓"):
     view_history()
+
+st.markdown("---")
+st.markdown("### ⚠️ Reset Data")
+
+with st.expander("Klik untuk reset semua data"):
+    if st.button("🗑️ Hapus Seluruh Data Inventory"):
+        confirm = st.checkbox("Saya yakin ingin menghapus semua data.")
+        if confirm:
+            from utils.db import reset_inventory
+            reset_inventory()
+            st.success("✅ Semua data berhasil dihapus.")
+        else:
+            st.warning("✅ Centang konfirmasi dulu sebelum menghapus.")
