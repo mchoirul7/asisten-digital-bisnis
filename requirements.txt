@@ -1,0 +1,14 @@
+streamlit
+pandas
+openpyxl
+python-docx
+scikit-learn
+numpy
+sqlalchemy
+langchain
+tiktoken
+nltk
+sentence-transformers
+python-telegram-bot
+google-generativeai
+
