@@ -1,6 +1,6 @@
 DB_PATH = "data/history.db"
 UPLOAD_FOLDER = "data/uploads/"
 PROCESSED_FOLDER = "data/processed/"
-TELEGRAM_BOT_TOKEN = "your_telegram_bot_token"
-TELEGRAM_CHAT_ID = "your_telegram_chat_id"
+TELEGRAM_BOT_TOKEN = "8094120710:AAGpGWbFfyTYoXFrHZy7laPqbRYLZIiuNdg"
+TELEGRAM_CHAT_ID = "109573401"
 GEMINI_API_KEY = "AIzaSyCh4eRCamPCQtblZhTVxtPva_FulOoC7uY"
