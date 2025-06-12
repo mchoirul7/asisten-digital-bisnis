@@ -13,4 +13,5 @@ python-telegram-bot
 google-generativeai
 matplotlib
 plotly
+tabulate
 
