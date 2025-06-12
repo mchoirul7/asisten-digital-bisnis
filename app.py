@@ -1,84 +1,63 @@
 import streamlit as st
-from utils.db import init_db
+import time
+from utils.db import init_db, reset_inventory
 from ui.uploader import upload_and_process_files
 from ui.dashboard import show_dashboard
 from ui.history_viewer import view_history
 
-# Inisialisasi database
-init_db()
-
-# Konfigurasi halaman
+# SETUP HALAMAN – harus paling awal dan hanya sekali
 st.set_page_config(page_title="Smart Inventory Assistant", layout="wide")
 
-# Inject CSS untuk memperbaiki layout sidebar
-st.markdown("""
-    <style>
-        /* Kurangi padding sidebar agar logo dan menu lebih rapat */
-        [data-testid="stSidebar"] > div:first-child {
-            padding-top: 0rem;
-            padding-bottom: 0rem;
-        }
+# INISIALISASI DB
+init_db()
 
-        /* Logo lebih rapat ke menu */
-        .element-container img {
-            margin-bottom: 0.5rem;
-        }
+# SPLASH SCREEN – hanya muncul 1x per sesi
+def show_splash():
+    st.markdown("<div style='text-align:center; padding-top:20vh;'>", unsafe_allow_html=True)
+    st.image("assets/logo-adb.png", width=200)
+    st.markdown("<h4>Memuat aplikasi Smart Inventory...</h4>", unsafe_allow_html=True)
 
-        /* Heading menu rapat */
-        .css-1v0mbdj.e1f1d6gn3 {
-            margin-top: 0.25rem !important;
-            margin-bottom: 0.5rem !important;
-        }
+    progress = st.progress(0)
+    for i in range(101):
+        time.sleep(0.015)
+        progress.progress(i)
 
-        /* Jarak antar menu radio lebih sempit */
-        .stRadio > div {
-            gap: 0.25rem;
-        }
+    st.markdown("</div>", unsafe_allow_html=True)
 
-        /* Optional: kecilkan font versi */
-        .sidebar-footer {
-            font-size: 0.8rem;
-            color: #888;
-            margin-top: 1rem;
-            text-align: center;
-        }
-    </style>
-""", unsafe_allow_html=True)
+if "splash_done" not in st.session_state:
+    show_splash()
+    st.session_state.splash_done = True
+    st.rerun()
 
-# Sidebar
+# SIDEBAR
 with st.sidebar:
     st.image("assets/logo-adb.png", width=150)
-    st.markdown("### 🧭 Menu Utama")
+    st.markdown("## Smart Inventory")
+    st.markdown("### 🧭 Navigasi")
 
     menu = st.radio(
         label="",
-        options=[
-            "📁 Upload Data",
-            "📊 Dashboard",
-            "🕓 Riwayat Upload"
-        ]
+        options=["📁 Upload Data", "📊 Dashboard", "🕓 Riwayat Upload"]
     )
 
     st.markdown("---")
-    st.markdown('<div class="sidebar-footer">Versi 1.0 – ADB © 2025</div>', unsafe_allow_html=True)
-
-# Routing konten utama
-if menu.startswith("📁"):
-    upload_and_process_files()
-elif menu.startswith("📊"):
-    show_dashboard()
-elif menu.startswith("🕓"):
-    view_history()
-
-st.markdown("---")
-st.markdown("### ⚠️ Reset Data")
-
-with st.expander("Klik untuk reset semua data"):
-    if st.button("🗑️ Hapus Seluruh Data Inventory"):
+    st.markdown("### ⚠️ Reset Data")
+    with st.expander("Klik untuk reset semua data"):
         confirm = st.checkbox("Saya yakin ingin menghapus semua data.")
         if confirm:
-            from utils.db import reset_inventory
-            reset_inventory()
-            st.success("✅ Semua data berhasil dihapus.")
+            if st.button("🗑️ Hapus Seluruh Data Inventory"):
+                reset_inventory()
+                st.success("✅ Semua data berhasil dihapus.")
         else:
-            st.warning("✅ Centang konfirmasi dulu sebelum menghapus.")
+            st.info("Centang konfirmasi dulu sebelum menghapus.")
+
+    st.markdown("---")
+    st.markdown("<small>Versi 1.0 – ADB © 2025</small>", unsafe_allow_html=True)
+
+# ROUTING
+if menu == "📁 Upload Data":
+    upload_and_process_files()
+elif menu == "📊 Dashboard":
+    show_dashboard()
+elif menu == "🕓 Riwayat Upload":
+    view_history()
